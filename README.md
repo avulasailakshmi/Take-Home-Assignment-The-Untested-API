@@ -1,113 +1,114 @@
-# Take-Home Assignment — The Untested API
+# The Untested API — Full Stack / Backend Take-Home Project
 
-A 2-day take-home assignment. You'll read unfamiliar code, write tests, track down bugs, and ship a small feature.
+A Node.js and Express API project focused on debugging, automated testing, validation, and feature development.
 
-Read **[ASSIGNMENT.md](./ASSIGNMENT.md)** for the full brief before you start.
+This repository demonstrates my ability to understand an unfamiliar codebase, identify issues, write tests, fix bugs, and implement a new API feature.
 
----
+## What I Worked On
 
-## A note on AI tools
+- Added unit tests for the task service using Jest
+- Added integration tests for Express routes using Supertest
+- Tested CRUD flows, filtering, pagination, statistics, completion, validation, and missing-resource cases
+- Fixed a pagination offset bug
+- Implemented `PATCH /tasks/:id/assign`
+- Added validation for the assignee field
+- Documented additional issues and production considerations
 
-You're welcome to use AI tools. What we're evaluating is your ability to read and reason about unfamiliar code — so your submission should reflect your own understanding, not just generated output.
+## Test Results
 
-Concretely:
-- For each bug you report: include where in the code it lives and why it happens
-- For the feature you implement: briefly explain the design decisions you made
-- If something surprised you or you had to make a tradeoff, say so
+The completed submission achieved:
 
----
+- **2 / 2 test suites passed**
+- **18 / 18 tests passed**
+- **95.48% statement coverage**
+- **89.53% branch coverage**
+- **93.33% function coverage**
+- **95.03% line coverage**
 
-## Getting Started
+## Tech Stack
 
-**Prerequisites:** Node.js 18+
+- JavaScript
+- Node.js
+- Express.js
+- Jest
+- Supertest
+- REST APIs
+- Git & GitHub
 
-```bash
-cd task-api
-npm install
-npm start        # runs on http://localhost:3000
+## API Features
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/tasks` | List tasks with filtering and pagination |
+| `POST` | `/tasks` | Create a task |
+| `PUT` | `/tasks/:id` | Update a task |
+| `DELETE` | `/tasks/:id` | Delete a task |
+| `PATCH` | `/tasks/:id/complete` | Mark a task as completed |
+| `GET` | `/tasks/stats` | Get task statistics |
+| `PATCH` | `/tasks/:id/assign` | Assign or reassign a task to a user |
+
+## Assignment Feature
+
+I implemented the task assignment endpoint:
+
+```http
+PATCH /tasks/:id/assign
 ```
 
-**Tests:**
+The endpoint:
 
-```bash
-npm test           # run test suite
-npm run coverage   # run with coverage report
-```
+- Requires `assignee` to be a non-empty string
+- Trims surrounding whitespace
+- Returns `404` when the task does not exist
+- Supports reassignment
 
----
+## Bug Fix
+
+I identified and fixed a pagination bug where the documented page number was being treated like a zero-based index. After the fix, page 1 correctly starts with the first task.
+
+Additional observations are documented in [`BUG_REPORT.md`](./BUG_REPORT.md).
 
 ## Project Structure
 
-```
-task-api/
-  src/
-    app.js                  # Express app setup
-    routes/tasks.js         # Route handlers
-    services/taskService.js # Business logic + in-memory data store
-    utils/validators.js     # Input validation helpers
-  tests/                    # Your tests go here
-  package.json
-  jest.config.js
-ASSIGNMENT.md               # Full brief — read this first
-```
-
-> The data store is in-memory. It resets every time the server restarts.
-
----
-
-## API Reference
-
-| Method   | Path                      | Description                              |
-|----------|---------------------------|------------------------------------------|
-| `GET`    | `/tasks`                  | List all tasks. Supports `?status=`, `?page=`, `?limit=` |
-| `POST`   | `/tasks`                  | Create a new task                        |
-| `PUT`    | `/tasks/:id`              | Full update of a task                    |
-| `DELETE` | `/tasks/:id`              | Delete a task (returns 204)              |
-| `PATCH`  | `/tasks/:id/complete`     | Mark a task as complete                  |
-| `GET`    | `/tasks/stats`            | Counts by status + overdue count         |
-| `PATCH`  | `/tasks/:id/assign`       | **Assign a task to a user** _(to implement)_ |
-
-### Task shape
-
-```json
-{
-  "id": "uuid",
-  "title": "string",
-  "description": "string",
-  "status": "pending | in-progress | completed",
-  "priority": "low | medium | high",
-  "dueDate": "ISO 8601 or null",
-  "completedAt": "ISO 8601 or null",
-  "createdAt": "ISO 8601"
-}
+```text
+Take-Home-Assignment-The-Untested-API/
+├── BUG_REPORT.md
+├── SUBMISSION_NOTES.md
+├── task-api/
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── routes/tasks.js
+│   │   ├── services/taskService.js
+│   │   └── utils/validators.js
+│   ├── tests/
+│   │   ├── taskService.test.js
+│   │   └── tasks.integration.test.js
+│   ├── package.json
+│   └── jest.config.js
+└── README.md
 ```
 
-### Sample requests
+## Run Locally
 
-**Create a task**
 ```bash
-curl -X POST http://localhost:3000/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Write tests", "priority": "high"}'
+git clone https://github.com/avulasailakshmi/Take-Home-Assignment-The-Untested-API.git
+cd Take-Home-Assignment-The-Untested-API
+git checkout submission
+cd task-api
+npm install
+npm test
+npm run coverage
+npm start
 ```
 
-**List tasks with filter**
-```bash
-curl "http://localhost:3000/tasks?status=pending&page=1&limit=10"
+The API runs at:
+
+```text
+http://localhost:3000
 ```
 
-**Mark complete**
-```bash
-curl -X PATCH http://localhost:3000/tasks/<id>/complete
-```
+## What This Project Demonstrates
 
----
+This project gave me practical experience with backend development, REST API design, automated testing, debugging, validation, codebase analysis, and making focused changes without unnecessarily rewriting existing functionality.
 
-## What to Submit
-
-See [ASSIGNMENT.md](./ASSIGNMENT.md) for full submission requirements. At minimum, include:
-
-- **Test files** — covering the endpoints and edge cases you identified
-- **Bug report** — what you found, where in the code, and why it's a bug (not just symptoms)
-- **At least one fix** — with a note on your approach
-- **`PATCH /tasks/:id/assign` implementation** — plus a short explanation of any design decisions (validation, edge cases, etc.)
+For more detail about my implementation decisions and testing approach, see [`SUBMISSION_NOTES.md`](./SUBMISSION_NOTES.md).
